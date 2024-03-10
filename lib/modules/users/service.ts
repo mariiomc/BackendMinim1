@@ -3,15 +3,11 @@ import users from './schema';
 import { Types } from 'mongoose';
 
 export default class UserService {
-    
-    public async createUser(user_params: IUser): Promise<IUser> {
+    public async register(user_params:IUser): Promise<IUser> {
         try {
             const session = new users(user_params);
-            const result = await session.save();
-            // Convert _id to string
-            const newUser: IUser = { ...result.toObject(), _id: result._id.toString() };
-            return newUser;
-        } catch (error) {
+            return await session.save();
+        }catch(error) {
             throw error;
         }
     }
@@ -55,24 +51,6 @@ export default class UserService {
 
             // Save the updated user document
             await user.save();
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    public async populateUserPosts(query: any): Promise<IUser | null> {
-        try {
-            // Find the user document and populate the 'posts' field
-            const user = await users.findOne(query).populate('posts').exec();
-            if (!user) {
-                return null;
-            }
-            // Convert _id to string
-            const populatedUser: IUser = {
-                ...user.toObject(),
-                _id: user._id.toString()
-            };
-            return populatedUser;
         } catch (error) {
             throw error;
         }
