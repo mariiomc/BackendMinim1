@@ -7,15 +7,27 @@ export class UserController {
 
     private user_service: UserService = new UserService();
 
-    public async create_user(req: Request, res: Response) {
+    public async register_user(req: Request, res: Response) {
         try{
             // this check whether all the filds were send through the request or not
-            if (req.body.name && req.body.email && req.body.phone_number && req.body.gender) {
+            if (req.body.first_name 
+                && req.body.last_name 
+                && req.body.email 
+                && req.body.phone_number
+                && req.body.gender
+                && req.body.password
+                && req.body.birth_date
+                ) {
                 const user_params: IUser = {
-                    name: req.body.name,
+                    first_name: req.body.first_name,
+                    last_name: req.body.last_name,
                     email: req.body.email,
                     phone_number: req.body.phone_number,
                     gender: req.body.gender,
+                    password: req.body.password,
+                    birth_date: req.body.birth_date,
+                    creation_date: new Date(),
+                    modified_date: new Date(),
                 };
                 const user_data = await this.user_service.register(user_params);
                 return res.status(201).json({ message: 'User created successfully', user: user_data });
@@ -32,7 +44,10 @@ export class UserController {
             if (req.params.id) {
                 const user_filter = { _id: req.params.id };
                 // Fetch user
-                const user_data = await this.user_service.filterUser(user_filter);
+                const user_data = await this.user_service.filterOneUser(user_filter);
+                if(user_data.user_deactivated===true){
+                    return res.status(400).json({ error: 'User not found' });
+                }
                 // Send success response
                 return res.status(200).json({ data: user_data, message: 'Successful'});
             } else {
@@ -43,28 +58,64 @@ export class UserController {
         }
     }
 
+    public async get_users(req: Request, res: Response) {
+        try {
+            // Extract pagination parameters from query string or use default values
+            const page = req.query.page ? parseInt(req.query.page as string) : 1;
+            const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 10;
+    
+            // Fetch users based on pagination parameters
+            const user_data = await this.user_service.filterUsers({}, page, pageSize);
+    
+            // Send success response
+            return res.status(200).json({ data: user_data, message: 'Successful' });
+        } catch (error) {
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+    
+
     public async update_user(req: Request, res: Response) {
         try {
             if (req.params.id) {
                 const user_filter = { _id: req.params.id };
                 // Fetch user
-                const user_data = await this.user_service.filterUser(user_filter);
-                if (!user_data) {
-                    // Send failure response if user not found
-                    return res.status(400).json({ error: 'User not found'});
+                const user_data = await this.user_service.filterOneUser(user_filter);
+                if(user_data.user_deactivated===true){
+                    return res.status(400).json({ error: 'User not found' });
                 }
                 const objectid = new mongoose.Types.ObjectId(req.params.id);
                 const user_params: IUser = {
                     _id: objectid, 
-                    name: req.body.name || user_data.name,
+                    first_name: req.body.first_name || user_data.first_name,
+                    middle_name: req.body.middle_name || user_data.middle_name,
+                    last_name: req.body.last_name || user_data.last_name,
                     email: req.body.email || user_data.email,
                     phone_number: req.body.phone_number || user_data.phone_number,
                     gender: req.body.gender || user_data.gender,
+                    places: user_data.places,
+                    reviews: user_data.reviews,
+                    conversations: user_data.conversations,
+                    user_rating: user_data.user_rating,
+                    photo: req.body.photo || user_data.photo,
+                    description: req.body.description || user_data.description,
+                    dni: req.body.dni || user_data.dni,
+                    personality: req.body.personality || user_data.personality,
+                    password: req.body.password || user_data.password,
+                    birth_date: req.body.birth_date || user_data.birth_date,
+                    address: req.body.address || user_data.address,
+                    emergency_contact: {
+                        full_name: req.body.emergency_contact.full_name || user_data.emergency_contact.full_name, 
+                        telephone: req.body.emergency_contact.telephone || user_data.emergency_contact.telephone,
+                    },
+                    user_deactivated: user_data.user_deactivated,
+                    creation_date: user_data.creation_date,
+                    modified_date: new Date(),
                 };
                 // Update user
                 await this.user_service.updateUser(user_params);
                 //get new user data
-                const new_user_data = await this.user_service.filterUser(user_filter);
+                const new_user_data = await this.user_service.filterOneUser(user_filter);
                 // Send success response
                 return res.status(200).json({ data: new_user_data, message: 'Successful'});
             } else {
@@ -77,28 +128,61 @@ export class UserController {
             return res.status(500).json({ error: 'Internal server error' });
         }
     }
-    
-    
 
-    public async delete_user(req: Request, res: Response) {
+    public async deactivate_user(req: Request, res: Response) {
         try {
             if (req.params.id) {
-                // Delete user
-                const delete_details = await this.user_service.deleteUser(req.params.id);
-                if (delete_details.deletedCount !== 0) {
-                    // Send success response if user deleted
-                    return res.status(200).json({ message: 'Successful'});
-                } else {
-                    // Send failure response if user not found
+                const user_filter = { _id: req.params.id };
+                // Fetch user
+                const user_data = await this.user_service.filterOneUser(user_filter);
+                if(user_data.user_deactivated===true){
                     return res.status(400).json({ error: 'User not found' });
                 }
+                const objectid = new mongoose.Types.ObjectId(req.params.id);
+                const user_params: IUser = {
+                    _id: objectid, 
+                    first_name: user_data.first_name,
+                    middle_name: user_data.middle_name,
+                    last_name: user_data.last_name,
+                    email: user_data.email,
+                    phone_number: user_data.phone_number,
+                    gender: user_data.gender,
+                    places: user_data.places,
+                    reviews: user_data.reviews,
+                    conversations: user_data.conversations,
+                    user_rating: user_data.user_rating,
+                    photo: user_data.photo,
+                    description: user_data.description,
+                    dni: user_data.dni,
+                    personality: user_data.personality,
+                    password: user_data.password,
+                    birth_date: user_data.birth_date,
+                    address: user_data.address,
+                    emergency_contact: {
+                        full_name: user_data.emergency_contact.full_name, 
+                        telephone: user_data.emergency_contact.telephone,
+                    },
+                    user_deactivated: true,
+                    creation_date: user_data.creation_date,
+                    modified_date: new Date(),
+                };
+                // deactivate user
+                await this.user_service.updateUser(user_params);
+                const new_user_data = await this.user_service.filterOneUser(user_filter);
+                // Send success response
+                if(new_user_data.user_deactivated===true){
+                    return res.status(200).json({ message: 'Successful'});
+                }                
             } else {
                 // Send error response if ID parameter is missing
-                return res.status(400).json({ error: 'Missing Id' });
+                return res.status(400).json({ error: 'Missing ID parameter' });
             }
         } catch (error) {
             // Catch and handle any errors
+            console.error("Error updating:", error);
             return res.status(500).json({ error: 'Internal server error' });
         }
     }
+
+    
 }

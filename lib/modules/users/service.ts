@@ -12,13 +12,24 @@ export default class UserService {
         }
     }
 
-    public async filterUser(query: any): Promise<IUser | null> {
+    public async filterOneUser(query: any): Promise<IUser | null> {
         try {
             return await users.findOne(query);
         } catch (error) {
             throw error;
         }
     }
+
+    public async filterUsers(query: any, page: number, pageSize: number): Promise<IUser[] | null> {
+        try {
+            const skipCount = (page - 1) * pageSize;
+            const updatedQuery = { ...query, user_deactivated: { $ne: true } };
+            return await users.find(updatedQuery).skip(skipCount).limit(pageSize);
+        } catch (error) {
+            throw error;
+        }
+    }
+    
 
     public async updateUser(user_params: IUser): Promise<void> {
         try {
@@ -29,10 +40,10 @@ export default class UserService {
         }
     }
 
-    public async deleteUser(_id: string): Promise<{ deletedCount: number }> {
+    public async deactivateUser(user_params: IUser): Promise<void> {
         try {
-            const query = { _id: _id };
-            return await users.deleteOne(query);
+            const query = { _id: user_params._id };
+            await users.findOneAndUpdate(query, user_params);
         } catch (error) {
             throw error;
         }
@@ -66,6 +77,42 @@ export default class UserService {
 
             // Add the post ID to the user's array of posts
             user.reviews.push(reviewId);
+
+            // Save the updated user document
+            await user.save();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async addConversationToUser(userId: Types.ObjectId, conversationId: Types.ObjectId): Promise<void> {
+        try {
+            // Retrieve the user document by ID
+            const user = await users.findById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            // Add the post ID to the user's array of posts
+            user.conversations.push(conversationId);
+
+            // Save the updated user document
+            await user.save();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async addHousingOfferedToUser(userId: Types.ObjectId, housingId: Types.ObjectId): Promise<void> {
+        try {
+            // Retrieve the user document by ID
+            const user = await users.findById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            // Add the post ID to the user's array of posts
+            user.housing_offered.push(housingId);
 
             // Save the updated user document
             await user.save();
