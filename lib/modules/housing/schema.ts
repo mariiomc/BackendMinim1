@@ -28,7 +28,8 @@ const schema = new Schema({
         sunday: { type: String, required: true }
     },
     verified: { type: Boolean, required: true },
-    date: { type: Date, required: true }
+    date: { type: Date, required: true },
+    deactivated: {type:Boolean,required:true,default:false},
 });
 
 export default mongoose.model("housing", schema);

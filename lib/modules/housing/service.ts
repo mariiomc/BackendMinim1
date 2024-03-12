@@ -51,10 +51,10 @@ export default class HousingService {
         }
     }
 
-    public async deleteHouse(_id: string): Promise<{ deletedCount: number }> {
+    public async deactivatehouse(house_params: IHousing): Promise<void> {
         try {
-            const query = { _id: _id };
-            return await housing.deleteOne(query);
+            const query = { _id: house_params._id };
+            await housing.findOneAndUpdate(query, house_params);
         } catch (error) {
             throw error;
         }

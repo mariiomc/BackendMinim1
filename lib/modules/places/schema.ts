@@ -32,6 +32,7 @@ const schema = new Schema({
     sunday: { type: String, required: true },
   },
   date: { type: Date, default:Date.now, required: true },
+  deactivated: {type:Boolean,required:true,default:false},
 });
 
 export default mongoose.model("places", schema);
