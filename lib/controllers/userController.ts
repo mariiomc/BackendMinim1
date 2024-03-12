@@ -26,6 +26,7 @@ export class UserController {
                     gender: req.body.gender,
                     password: req.body.password,
                     birth_date: req.body.birth_date,
+                    user_deactivated: false,
                     creation_date: new Date(),
                     modified_date: new Date(),
                 };

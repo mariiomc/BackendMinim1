@@ -24,7 +24,7 @@ export interface IUser {
         full_name: string;
         telephone: string;
     };
-    user_deactivated?:boolean;
+    user_deactivated:boolean;
     creation_date: Date;
     modified_date: Date;
 }
