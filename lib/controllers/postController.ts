@@ -12,11 +12,20 @@ export class PostController {
     public async createPost(req: Request, res: Response) {
         try{
             // this check whether all the filds were send through the request or not
-            if (req.body.title && req.body.content && req.body.author){
+            if (req.body.title && req.body.content && req.body.author && req.body.rating && req.body.cords
+                && req.body.photo && req.body.location && req.body.type && req.body.schedule
+                && req.body.date){
                 const post_params:IPost = {
                     title: req.body.title,
                     content: req.body.content,
-                    author: req.body.author
+                    author: req.body.author,
+                    rating: req.body.rating,
+                    cords: req.body.cords,
+                    photo: req.body.photo,
+                    location: req.body.location,
+                    type: req.body.type,
+                    schedule: req.body.schedule,
+                    date: req.body.date
                 };
                 const post_data = await this.post_service.createPost(post_params);
                  // Now, you may want to add the created post's ID to the user's array of posts
