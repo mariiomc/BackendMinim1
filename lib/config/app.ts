@@ -6,7 +6,7 @@ import environment from "../environment";
 import { TestRoutes } from "../routes/test_routes";
 import { UserRoutes } from "../routes/user_routes";
 import { CommonRoutes } from "../routes/common_routes";
-import { PostRoutes } from "../routes/post_routes";
+import { PlaceRoutes } from "../routes/place_routes";
 import { ReviewRoutes } from "../routes/review_routes";
 
 
@@ -18,7 +18,7 @@ class App {
    private test_routes: TestRoutes = new TestRoutes();
    private common_routes: CommonRoutes = new CommonRoutes();
    private user_routes: UserRoutes = new UserRoutes();
-   private post_routes: PostRoutes = new PostRoutes();
+   private place_routes: PlaceRoutes = new PlaceRoutes();
    private review_routes: ReviewRoutes = new ReviewRoutes();
 
    constructor() {
@@ -27,7 +27,7 @@ class App {
       this.mongoSetup();
       this.test_routes.route(this.app);
       this.user_routes.route(this.app);
-      this.post_routes.route(this.app);
+      this.place_routes.route(this.app);
       this.review_routes.route(this.app);
       this.common_routes.route(this.app);
       

@@ -38,7 +38,7 @@ export default class UserService {
         }
     }
 
-    public async addPostToUser(userId: Types.ObjectId, postId: Types.ObjectId): Promise<void> {
+    public async addPlaceToUser(userId: Types.ObjectId, placeId: Types.ObjectId): Promise<void> {
         try {
             // Retrieve the user document by ID
             const user = await users.findById(userId);
@@ -47,7 +47,7 @@ export default class UserService {
             }
 
             // Add the post ID to the user's array of posts
-            user.posts.push(postId);
+            user.places.push(placeId);
 
             // Save the updated user document
             await user.save();

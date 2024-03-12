@@ -6,6 +6,6 @@ export interface IUser {
     email: string;
     phone_number: string;
     gender: string;
-    posts?: mongoose.Types.ObjectId[]; // Array to store post IDs
+    places?: mongoose.Types.ObjectId[]; // Array to store post IDs
     reviews?: mongoose.Types.ObjectId[]; // Array to store post IDs
 }

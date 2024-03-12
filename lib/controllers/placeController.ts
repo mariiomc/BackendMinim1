@@ -1,36 +1,36 @@
 import { Request, Response } from 'express';
-import { IPost } from '../modules/posts/model';
-import PostService from '../modules/posts/service';
+import { IPlace } from '../modules/places/model';
+import PlaceService from '../modules/places/service';
 import UserService from '../modules/users/service';
 import e = require('express');
 
-export class PostController {
+export class PlaceController {
 
-    private post_service: PostService = new PostService();
+    private place_service: PlaceService = new PlaceService();
     private user_service: UserService = new UserService();
 
-    public async createPost(req: Request, res: Response) {
+    public async createPlace(req: Request, res: Response) {
         try{
             // this check whether all the filds were send through the request or not
             if (req.body.title && req.body.content && req.body.author && req.body.rating && req.body.cords
                 && req.body.photo && req.body.location && req.body.type && req.body.schedule
                 && req.body.date){
-                const post_params:IPost = {
+                const place_params:IPlace = {
                     title: req.body.title,
                     content: req.body.content,
                     author: req.body.author,
                     rating: req.body.rating,
-                    cords: req.body.cords,
+                    coords: req.body.cords,
                     photo: req.body.photo,
                     location: req.body.location,
                     type: req.body.type,
                     schedule: req.body.schedule,
                     date: req.body.date
                 };
-                const post_data = await this.post_service.createPost(post_params);
+                const place_data = await this.place_service.createPlace(place_params);
                  // Now, you may want to add the created post's ID to the user's array of posts
-                await this.user_service.addPostToUser(req.body.author, post_data._id); //
-                return res.status(201).json({ message: 'Post created successfully', post: post_data });
+                await this.user_service.addPlaceToUser(req.body.author, place_data._id); //
+                return res.status(201).json({ message: 'Post created successfully', place: place_data });
             }else{            
                 return res.status(400).json({ error: 'Missing fields' });
             }
@@ -39,14 +39,14 @@ export class PostController {
         }
     }
 
-    public async getPost(req: Request, res: Response) {
+    public async getPlace(req: Request, res: Response) {
         try{
             if (req.params.id) {
-                const post_filter = { _id: req.params.id };
+                const place_filter = { _id: req.params.id };
                 // Fetch user
-                const post_data = await this.post_service.filterPost(post_filter);
+                const place_data = await this.place_service.filterPlace(place_filter);
                 // Send success response
-                return res.status(200).json({ data: post_data, message: 'Successful'});
+                return res.status(200).json({ data: place_data, message: 'Successful'});
             } else {
                 return res.status(400).json({ error: 'Missing fields' });
             }
@@ -55,11 +55,11 @@ export class PostController {
         }
     }
 
-    public async deletePost(req: Request, res: Response) {
+    public async deletePlace(req: Request, res: Response) {
         try {
             if (req.params.id) {
                 // Delete post
-                const delete_details = await this.post_service.deletePost(req.params.id);
+                const delete_details = await this.place_service.deletePlace(req.params.id);
                 if (delete_details.deletedCount !== 0) {
                     // Send success response if user deleted
                     return res.status(200).json({ message: 'Successful'});

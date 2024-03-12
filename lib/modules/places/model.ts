@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export interface IPost {
+export interface IPlace {
     _id?: mongoose.Types.ObjectId; // Optional _id field
     title: string;
     content: string;

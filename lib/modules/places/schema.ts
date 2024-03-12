@@ -34,4 +34,4 @@ const schema = new Schema({
   date: { type: Date, default:Date.now, required: true },
 });
 
-export default mongoose.model("posts", schema);
+export default mongoose.model("places", schema);

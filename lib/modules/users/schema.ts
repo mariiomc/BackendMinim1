@@ -7,7 +7,7 @@ const schema = new Schema({
     email: {type:String,required:true,unique:true},
     phone_number: {type:String,required:true},
     gender: {type:String,required:true},
-    posts: [{ type: Schema.Types.ObjectId, ref: 'posts' }], // Array of ObjectIds referencing the Post model
+    places: [{ type: Schema.Types.ObjectId, ref: 'places' }], // Array of ObjectIds referencing the Post model
     reviews: [{ type: Schema.Types.ObjectId, ref: 'reviews' }] // Array of ObjectIds referencing the Post model
     }
 );
