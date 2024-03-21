@@ -12,7 +12,7 @@ export default class ConversationService {
         }
     }
 
-    public async filterPost(query: any): Promise<IConversation | null> {
+    public async filterConversation(query: any): Promise<IConversation | null> {
         try {
             return await conversations.findOne(query);
         } catch (error) {
@@ -20,7 +20,7 @@ export default class ConversationService {
         }
     }
 
-    public async deletePost(_id: string): Promise<{ deletedCount: number }> {
+    public async deleteConversation(_id: string): Promise<{ deletedCount: number }> {
         try {
             const query = { _id: _id };
             return await conversations.deleteOne(query);
