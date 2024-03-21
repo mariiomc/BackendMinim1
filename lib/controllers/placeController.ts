@@ -14,7 +14,7 @@ export class PlaceController {
             // this check whether all the filds were send through the request or not
             if (req.body.title && req.body.content && req.body.author && req.body.rating && req.body.cords
                 && req.body.photo && req.body.location && req.body.type && req.body.schedule
-                && req.body.date){
+                && req.body.date && req.body.deactivated){
                 const place_params:IPlace = {
                     title: req.body.title,
                     content: req.body.content,
@@ -25,7 +25,8 @@ export class PlaceController {
                     location: req.body.location,
                     type: req.body.type,
                     schedule: req.body.schedule,
-                    date: req.body.date
+                    date: req.body.date,
+                    deactivated: req.body.deactivated,
                 };
                 const place_data = await this.place_service.createPlace(place_params);
                  // Now, you may want to add the created post's ID to the user's array of posts
@@ -59,7 +60,7 @@ export class PlaceController {
         try {
             if (req.params.id) {
                 // Delete post
-                const delete_details = await this.place_service.deletePlace(req.params.id);
+                const delete_details = await this.place_service.deactivatePlace(req.params.id);
                 if (delete_details.deletedCount !== 0) {
                     // Send success response if user deleted
                     return res.status(200).json({ message: 'Successful'});
