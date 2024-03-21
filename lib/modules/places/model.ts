@@ -13,7 +13,7 @@ export interface IPlace {
     };
     photo: string;
     location: string;
-    type: {
+    typeOfPlace: {
         bankito: boolean;
         public: boolean; //false = private true = public
         covered: boolean;

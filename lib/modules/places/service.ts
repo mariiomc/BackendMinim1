@@ -20,14 +20,4 @@ export default class PostService {
         }
     }
 
-    public async updatePlace(qu)
-
-    public async deactivatePlace(place_params: IPlace): Promise<void> {
-        try {
-            const query = { _id: place_params._id };
-            await places.findOneAndUpdate(query, place_params);
-        } catch (error) {
-            throw error;
-        }
-    }
 }

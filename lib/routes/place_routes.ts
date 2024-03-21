@@ -15,9 +15,9 @@ export class PlaceRoutes {
             this.place_controller.getPlace(req, res);
         });
 
-        app.delete('/place/:id', (req: Request, res: Response) => {
-            this.place_controller.deletePlace(req, res);
-        });
+        // app.delete('/place/:id', (req: Request, res: Response) => {
+        //     this.place_controller.deletePlace(req, res);
+        // });
 
     }
 }

@@ -9,27 +9,30 @@ const schema = new Schema({
   reviews: [{ type: Schema.Types.ObjectId, ref: "reviews", required:false }],
   rating: { type: Number, required: true },
   coords: {
-    required:true,
+    type:{
     latitude: { type: Number, required: true },
-    longitude: { type: Number, required: true },
+    longitude: { type: Number, required: true }},
+    required: true,
   },
   photo: { type: String, required: true },
   location: { type: String, required: true },
-  type: {
-    required:true,
+  typeOfPlace: {
+    type: {
     bankito: { type: Boolean, required: true },
     public: { type: Boolean, required: true },
-    covered: { type: Boolean, required: true },
+    covered: { type: Boolean, required: true }},
+    required: true,
   },
   schedule: {
-    required:true,
+    type:{
     monday: { type: String, required: true },
     tuesday: { type: String, required: true },
     wednesday: { type: String, required: true },
     thursday: { type: String, required: true },
     friday: { type: String, required: true },
     saturday: { type: String, required: true },
-    sunday: { type: String, required: true },
+    sunday: { type: String, required: true }},
+    required: true
   },
   date: { type: Date, default:Date.now, required: true },
   deactivated: {type:Boolean,required:true,default:false},

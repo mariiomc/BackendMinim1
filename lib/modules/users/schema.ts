@@ -22,7 +22,6 @@ const schema = new Schema({
     address: {type:String,required:false},
     housing_offered: [{ type: Schema.Types.ObjectId, ref: 'housing' }], // Array of ObjectIds referencing the housing model
     emergency_contact: {
-        required:false,
         full_name: {type:String,required:true},
         telephone: {type:String,required:true}
     },
