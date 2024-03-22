@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { IConversation } from 'modules/conversations/model';
-import ConversationService from 'modules/conversations/service';
+import { IConversation } from '../modules/conversations/model';
+import ConversationService from '../modules/conversations/service';
 import UserService from '../modules/users/service';
 import e = require('express');
 

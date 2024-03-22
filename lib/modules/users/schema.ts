@@ -22,9 +22,11 @@ const schema = new Schema({
     address: {type:String,required:false},
     housing_offered: [{ type: Schema.Types.ObjectId, ref: 'housing' }], // Array of ObjectIds referencing the housing model
     emergency_contact: {
-        full_name: {type:String,required:true},
-        telephone: {type:String,required:true}
-    },
+        type:{
+        full_name: { type: String, required: true },
+        telephone: { type: String, required: true }},
+        required: false
+      },
     user_deactivated: {type:Boolean,required:true,default:false},
     creation_date: {type:Date,required:true,default:new Date()},
     modified_date: {type:Date,required:true,default: new Date()}
