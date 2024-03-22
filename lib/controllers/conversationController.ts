@@ -10,43 +10,43 @@ export class ConversationController {
     private user_service: UserService = new UserService();
 
     public async createConversation(req: Request, res: Response) {
-        try {
-          // this check whether all the fields were sent through the request or not
-          if (
-            req.body.user &&
-            req.body.content
-          ) {
-            const conversation_params: IConversation = {
-              user: req.body.user,
-              content: req.body.content,
-            };
-            const conversation_data = await this.conversation_service.createConversation(conversation_params);
-            // Now, you may want to add the created post's ID to the user's array of posts
-            await this.user_service.addConversationToUser(req.body.author, conversation_data._id);
-            return res.status(201).json({ message: 'Conversation created successfully', conversation: conversation_data });
-          } else {
-            return res.status(400).json({ error: 'Missing fields' });
+      try{
+          // this check whether all the filds were send through the request or not
+          if (req.body.user
+              && req.body.content
+              ) {
+              const conversation_params: IConversation = {
+                  user: req.body.user,
+                  content: req.body.content,
+              };
+              const conversation_data = await this.conversation_service.createConversation(conversation_params);
+              return res.status(201).json({ message: 'Conversation created successfully', conversation: conversation_data });
+          }else{            
+              return res.status(400).json({ error: 'Missing fields' });
           }
-        } catch (error) {
+      }catch(error){
           return res.status(500).json({ error: 'Internal server error' });
-        }
       }
+  }
 
-    public async getConversation(req: Request, res: Response) {
-        try{
-            if (req.params.id) {
-                const conversation_filter = { _id: req.params.id };
-                // Fetch user
-                const conversation_data = await this.conversation_service.filterConversation(conversation_filter);
-                // Send success response
-                return res.status(200).json({ data: conversation_data, message: 'Successful'});
-            } else {
-                return res.status(400).json({ error: 'Missing fields' });
+  public async getConversations(req: Request, res: Response) {
+    try{
+        if (req.params.id) {
+            const user_filter = { _id: req.params.id };
+            // Fetch user
+            const user_data = await this.user_service.filterOneUser(user_filter);
+            if(user_data.user_deactivated===true){
+                return res.status(400).json({ error: 'User not found' });
             }
-        }catch(error){
-            return res.status(500).json({ error: 'Internal server error' });
+            // Send success response
+            return res.status(200).json({ data: user_data, message: 'Successful'});
+        } else {
+            return res.status(400).json({ error: 'Missing fields' });
         }
+    }catch(error){
+        return res.status(500).json({ error: 'Internal server error' });
     }
+}
 
 public async deleteConversation(req: Request, res: Response) {
     try {

@@ -12,7 +12,7 @@ export class ConversationRoutes {
         });
 
         app.get('/conversation/:id', (req: Request, res: Response) => {
-            this.conversation_controller.getConversation(req, res);
+            this.conversation_controller.getConversations(req, res);
         });
 
         app.delete('/conversation/:id', (req: Request, res: Response) => {

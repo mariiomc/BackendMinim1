@@ -32,7 +32,7 @@ class Environment {
         } else if (this.environment === Environments.qa_environment) {
             return 'db_test_project_qa';
         } else {
-            return 'db_test_project_local';
+            return 'bankitos_BBDD';
         }
     }
 }

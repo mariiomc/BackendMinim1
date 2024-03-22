@@ -31,8 +31,10 @@ class App {
       this.user_routes.route(this.app);
       this.place_routes.route(this.app);
       this.review_routes.route(this.app);
-      this.common_routes.route(this.app);
       this.conversation_routes.route(this.app);
+      //Siempre dejarlo abajo del todo si no da error!!!
+      this.common_routes.route(this.app);
+   
       
    }
 
