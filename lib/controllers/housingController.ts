@@ -1,47 +1,46 @@
 import { Request, Response } from 'express';
-import { IPlace } from '../modules/places/model';
-import PlaceService from '../modules/places/service';
+import { IHousing } from '../modules/housing/model';
 import UserService from '../modules/users/service';
 import e = require('express');
+import HousingService from 'modules/housing/service';
 
-export class PlaceController {
+export class HousingController {
 
-    private place_service: PlaceService = new PlaceService();
+    private housing_service: HousingService = new HousingService();
     private user_service: UserService = new UserService();
 
-    public async createPlace(req: Request, res: Response) {
+    public async createHouse(req: Request, res: Response) {
         try {
           // this check whether all the fields were sent through the request or not
           if (
             req.body.title &&
-            req.body.content &&
-            req.body.author &&
+            req.body.description &&
+            req.body.owner &&
             req.body.rating &&
             req.body.coords && // corrected here
             req.body.photo &&
             req.body.location &&
-            req.body.type &&
+            req.body.availability &&
+            req.body.coffe &&
             req.body.schedule &&
-            req.body.modified_date &&
-            req.body.place_deactivated &&
-            req.body.modified_date
+            req.body.verified &&
+            req.body.date &&
+            req.body.deactivated
           ) {
-            const place_params: IPlace = {
+            const house_params: IHousing = {
               title: req.body.title,
-              content: req.body.content,
-              author: req.body.author,
+              description: req.body.description,
+              owner: req.body.owner,
               rating: req.body.rating,
+              reviews: req.body.reviews,
               coords:{
                 latitude: req.body.coords.latitude,
                 longitude: req.body.coords.longitude,
               },
               photo: req.body.photo,
               location: req.body.location,
-              typeOfPlace: {
-                bankito: req.body.type.bankito,
-                public: req.body.type.public,
-                covered: req.body.type.covered,
-              },
+              availability: req.body.availability,
+              coffee: req.body.coffee,
               schedule: {
                 monday: req.body.schedule.monday,
                 tuesday: req.body.schedule.tuesday,
@@ -51,13 +50,14 @@ export class PlaceController {
                 saturday: req.body.schedule.saturday,
                 sunday: req.body.schedule.sunday,
               },
-              modified_date: req.body.modified_date,
-              place_deactivated: req.body.place_deactivated,
+              verified: req.body.verified,
+              date: req.body.date,
+              deactivated: req.body.deactivated,
             };
-            const place_data = await this.place_service.createPlace(place_params);
+            const house_data = await this.housing_service.createHouse(house_params);
             // Now, you may want to add the created post's ID to the user's array of posts
-            await this.user_service.addPlaceToUser(req.body.author, place_data._id);
-            return res.status(201).json({ message: 'Post created successfully', place: place_data });
+            await this.user_service.addHousingOfferedToUser(req.body.author, house_data._id);
+            return res.status(201).json({ message: 'House created successfully', house: house_data });
           } else {
             return res.status(400).json({ error: 'Missing fields' });
           }
@@ -66,14 +66,14 @@ export class PlaceController {
         }
       }
 
-    public async getPlace(req: Request, res: Response) {
+    public async getHouse(req: Request, res: Response) {
         try{
             if (req.params.id) {
-                const place_filter = { _id: req.params.id };
+                const house_filter = { _id: req.params.id };
                 // Fetch user
-                const place_data = await this.place_service.filterPlace(place_filter);
+                const house_data = await this.housing_service.filterHouse(house_filter);
                 // Send success response
-                return res.status(200).json({ data: place_data, message: 'Successful'});
+                return res.status(200).json({ data: house_data, message: 'Successful'});
             } else {
                 return res.status(400).json({ error: 'Missing fields' });
             }
@@ -82,27 +82,27 @@ export class PlaceController {
         }
     }
 
-     public async deactivate_place(req: Request, res: Response) {
+    public async deactivate_house(req: Request, res: Response) {
       try {
         if (req.params.id) {
-            const place_filter = { _id: req.params.id };
+            const house_filter = { _id: req.params.id };
             // Fetch user
-            const place_data = await this.place_service.filterPlace(place_filter);
-            if(place_data.place_deactivated===true){
-                return res.status(400).json({ error: 'Place not found' });
+            const house_data = await this.housing_service.filterHouse(house_filter);
+            if(house_data.house_deactivated===true){
+                return res.status(400).json({ error: 'House not found' });
             }
             // Create a partial user object with only the user_deactivated field updated
-        const place_paramsPartial: Partial<IPlace> = {
-            place_deactivated: true,
+        const house_paramsPartial: Partial<IHousing> = {
+            house_deactivated: true,
             modified_date: new Date(),
         };
 
         // Update user
-        await this.place_service.deactivatePlace(place_data);
+        await this.housing_service.deactivatehouse(house_data);
 
-        const new_place_data = await this.place_service.filterPlace(place_filter);
+        const new_house_data = await this.housing_service.filterHouse(house_filter);
         // Send success response
-        if (new_place_data.place_deactivated === true) {
+        if (new_house_data.house_deactivated === true) {
             return res.status(200).json({ message: 'Successful' });
         }
     } else {

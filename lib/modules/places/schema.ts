@@ -35,7 +35,9 @@ const schema = new Schema({
     required: true
   },
   date: { type: Date, default:Date.now, required: true },
-  deactivated: {type:Boolean,required:true,default:false},
+  place_deactivated: {type:Boolean,required:true,default:false},
+  modified_date: {type:Date,required:true,default: new Date()}
+
 });
 
 export default mongoose.model("places", schema);

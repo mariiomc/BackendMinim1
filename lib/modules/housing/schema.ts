@@ -31,7 +31,9 @@ const schema = new Schema({
       },
     verified: { type: Boolean, required: true },
     date: { type: Date, required: true },
-    deactivated: {type:Boolean,required:true,default:false},
+    house_deactivated: {type:Boolean,required:true,default:false},
+    modified_date: {type:Date,required:true,default: new Date()}
+
 });
 
 export default mongoose.model("housing", schema);

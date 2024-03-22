@@ -6,4 +6,6 @@ export interface IReview {
     content: string;
     stars: number;
     author: mongoose.Types.ObjectId; // Reference to the User collection
+    review_deactivated:boolean;
+    modified_date: Date;
 }
