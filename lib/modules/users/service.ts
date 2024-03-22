@@ -1,6 +1,6 @@
 import { IUser } from './model';
 import users from './schema';
-import { Types } from 'mongoose';
+import { Types, FilterQuery } from 'mongoose';
 
 export default class UserService {
     public async register(user_params:IUser): Promise<IUser> {
@@ -40,14 +40,15 @@ export default class UserService {
         }
     }
 
-    public async deactivateUser(user_params: IUser): Promise<void> {
+    public async deactivateUser(user_paramsPartial: Partial<IUser>, user_filter: FilterQuery<IUser>): Promise<void> {
         try {
-            const query = { _id: user_params._id };
-            await users.findOneAndUpdate(query, user_params);
+            await users.findOneAndUpdate(user_filter, user_paramsPartial);
         } catch (error) {
             throw error;
         }
     }
+    
+    
 
     public async addPlaceToUser(userId: Types.ObjectId, placeId: Types.ObjectId): Promise<void> {
         try {

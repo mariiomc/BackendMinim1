@@ -141,52 +141,30 @@ export class UserController {
                 if(user_data.user_deactivated===true){
                     return res.status(400).json({ error: 'User not found' });
                 }
-                const objectid = new mongoose.Types.ObjectId(req.params.id);
-                const user_params: IUser = {
-                    _id: objectid, 
-                    first_name: user_data.first_name,
-                    middle_name: user_data.middle_name,
-                    last_name: user_data.last_name,
-                    email: user_data.email,
-                    phone_number: user_data.phone_number,
-                    gender: user_data.gender,
-                    places: user_data.places,
-                    reviews: user_data.reviews,
-                    conversations: user_data.conversations,
-                    user_rating: user_data.user_rating,
-                    photo: user_data.photo,
-                    description: user_data.description,
-                    dni: user_data.dni,
-                    personality: user_data.personality,
-                    password: user_data.password,
-                    birth_date: user_data.birth_date,
-                    role: user_data.role,
-                    address: user_data.address,
-                    emergency_contact: {
-                        full_name: user_data.emergency_contact.full_name, 
-                        telephone: user_data.emergency_contact.telephone,
-                    },
-                    user_deactivated: true,
-                    creation_date: user_data.creation_date,
-                    modified_date: new Date(),
-                };
-                // deactivate user
-                await this.user_service.updateUser(user_params);
-                const new_user_data = await this.user_service.filterOneUser(user_filter);
-                // Send success response
-                if(new_user_data.user_deactivated===true){
-                    return res.status(200).json({ message: 'Successful'});
-                }                
-            } else {
-                // Send error response if ID parameter is missing
-                return res.status(400).json({ error: 'Missing ID parameter' });
+                // Create a partial user object with only the user_deactivated field updated
+            const user_paramsPartial: Partial<IUser> = {
+                user_deactivated: true,
+                modified_date: new Date(),
+            };
+
+            // Update user
+            await this.user_service.deactivateUser(user_paramsPartial, user_filter);
+
+            const new_user_data = await this.user_service.filterOneUser(user_filter);
+            // Send success response
+            if (new_user_data.user_deactivated === true) {
+                return res.status(200).json({ message: 'Successful' });
             }
-        } catch (error) {
-            // Catch and handle any errors
-            console.error("Error updating:", error);
-            return res.status(500).json({ error: 'Internal server error' });
+        } else {
+            // Send error response if ID parameter is missing
+            return res.status(400).json({ error: 'Missing ID parameter' });
         }
+    } catch (error) {
+        // Catch and handle any errors
+        console.error("Error updating:", error);
+        return res.status(500).json({ error: 'Internal server error' });
     }
+}
 
     
 }
