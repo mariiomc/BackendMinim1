@@ -12,9 +12,11 @@ export default class ConversationService {
         }
     }
 
-    public async filterConversation(query: any): Promise<IConversation | null> {
+    public async filterConversations(query: any, page: number, pageSize: number): Promise<IConversation[] | null> {
         try {
-            return await conversations.findOne(query);
+            const skipCount = (page - 1) * pageSize;
+            const updatedQuery = { ...query, conversation_deactivated: { $ne: true } };
+            return await conversations.find(updatedQuery).skip(skipCount).limit(pageSize);
         } catch (error) {
             throw error;
         }
