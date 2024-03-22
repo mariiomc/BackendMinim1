@@ -18,6 +18,7 @@ export interface IUser {
     personality?:string;
     password: string;
     birth_date: Date;
+    role: string;
     address?:string;
     housing_offered?:mongoose.Types.ObjectId[];
     emergency_contact?: {

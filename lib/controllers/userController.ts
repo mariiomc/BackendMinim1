@@ -26,6 +26,7 @@ export class UserController {
                     gender: req.body.gender,
                     password: req.body.password,
                     birth_date: req.body.birth_date,
+                    role: req.body.role || 'user',
                     user_deactivated: false,
                     creation_date: new Date(),
                     modified_date: new Date(),
@@ -69,7 +70,7 @@ export class UserController {
             const user_data = await this.user_service.filterUsers({}, page, pageSize);
     
             // Send success response
-            return res.status(200).json({ data: user_data, message: 'Successful' });
+            return res.status(200).json({ data: user_data, message: 'Successful' });//quitar mensaje successful
         } catch (error) {
             return res.status(500).json({ error: 'Internal server error' });
         }
@@ -104,6 +105,7 @@ export class UserController {
                     personality: req.body.personality || user_data.personality,
                     password: req.body.password || user_data.password,
                     birth_date: req.body.birth_date || user_data.birth_date,
+                    role: req.body.role || user_data.role,
                     address: req.body.address || user_data.address,
                     emergency_contact: {
                         full_name: req.body.emergency_contact.full_name || user_data.emergency_contact.full_name, 
@@ -158,6 +160,7 @@ export class UserController {
                     personality: user_data.personality,
                     password: user_data.password,
                     birth_date: user_data.birth_date,
+                    role: user_data.role,
                     address: user_data.address,
                     emergency_contact: {
                         full_name: user_data.emergency_contact.full_name, 
