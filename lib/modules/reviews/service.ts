@@ -13,7 +13,7 @@ export default class ReviewService {
         }
     }
 
-    public async filterReviewsByUser(userId: any): Promise<IReview[]> {
+    public async filterReviewsByAuthor(userId: any): Promise<IReview[]> {
         try {
             const query = { author: userId };
             return await reviews.find(query);
@@ -58,7 +58,7 @@ export default class ReviewService {
         }
     }
 
-    public async deactivateUser(review_paramsPartial: Partial<IReview>, review_filter: FilterQuery<IReview>): Promise<void> {
+    public async deleteReview(review_paramsPartial: Partial<IReview>, review_filter: FilterQuery<IReview>): Promise<void> {
         try {
             await reviews.findOneAndUpdate(review_filter, review_paramsPartial);
         } catch (error) {

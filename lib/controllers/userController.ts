@@ -60,7 +60,39 @@ export class UserController {
         }
     }
 
+    public async get_user_even_deactivated(req: Request, res: Response) {
+        try{
+            if (req.params.id) {
+                const user_filter = { _id: req.params.id };
+                // Fetch user
+                const user_data = await this.user_service.filterOneUser(user_filter);
+                // Send success response
+                return res.status(200).json(user_data);
+            } else {
+                return res.status(400).json({ error: 'Missing fields' });
+            }
+        }catch(error){
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
     public async get_users(req: Request, res: Response) {
+        try {
+            // Extract pagination parameters from query string or use default values
+            const page = req.query.page ? parseInt(req.query.page as string) : 1;
+            const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 10;
+    
+            // Fetch users based on pagination parameters
+            const user_data = await this.user_service.filterUsers({}, page, pageSize);
+    
+            // Send success response
+            return res.status(200).json(user_data);
+        } catch (error) {
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
+    public async get_users_even_deactivated(req: Request, res: Response) {
         try {
             // Extract pagination parameters from query string or use default values
             const page = req.query.page ? parseInt(req.query.page as string) : 1;
