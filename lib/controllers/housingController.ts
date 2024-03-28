@@ -57,7 +57,7 @@ export class HousingController {
             const house_data = await this.housing_service.createHouse(house_params);
             // Now, you may want to add the created post's ID to the user's array of posts
             await this.user_service.addHousingOfferedToUser(req.body.author, house_data._id);
-            return res.status(201).json({ message: 'House created successfully', house: house_data });
+            return res.status(201).json(house_data);
           } else {
             return res.status(400).json({ error: 'Missing fields' });
           }
@@ -73,7 +73,7 @@ export class HousingController {
                 // Fetch user
                 const house_data = await this.housing_service.filterHouse(house_filter);
                 // Send success response
-                return res.status(200).json({ data: house_data, message: 'Successful'});
+                return res.status(200).json(house_data);
             } else {
                 return res.status(400).json({ error: 'Missing fields' });
             }

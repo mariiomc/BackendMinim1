@@ -17,12 +17,13 @@ export class ReviewController {
                     title: req.body.title,
                     content: req.body.content,
                     stars: req.body.stars,
-                    author: req.body.author
+                    author: req.body.author,
+                    
                 };
                 const review_data = await this.review_service.createReview(review_params);
                  // Now, you may want to add the created post's ID to the user's array of posts
                 await this.user_service.addReviewToUser(req.body.author, review_data._id); //
-                return res.status(201).json({ message: 'Post created successfully', post: review_data });
+                return res.status(201).json(review_data);
             }else{            
                 return res.status(400).json({ error: 'Missing fields' });
             }
@@ -38,7 +39,7 @@ export class ReviewController {
                 // Fetch user
                 const review_data = await this.review_service.filterReview(review_filter);
                 // Send success response
-                return res.status(200).json({ data: review_data, message: 'Successful'});
+                return res.status(200).json(review_data);
             } else {
                 return res.status(400).json({ error: 'Missing fields' });
             }
@@ -54,7 +55,7 @@ export class ReviewController {
                 const delete_details = await this.review_service.deleteReview(req.params.id);
                 if (delete_details.deletedCount !== 0) {
                     // Send success response if user deleted
-                    return res.status(200).json({ message: 'Successful'});
+                    return res.status(200).json({ message: 'Review Deleted'});
                 } else {
                     // Send failure response if user not found
                     return res.status(400).json({ error: 'Post not found' });

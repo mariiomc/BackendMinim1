@@ -29,7 +29,15 @@ export default class UserService {
             throw error;
         }
     }
-    
+    public async filterUsersEvenDeactivated(query: any, page: number, pageSize: number): Promise<IUser[] | null> {
+        try {
+            const skipCount = (page - 1) * pageSize;
+            const updatedQuery = { query };
+            return await users.find(updatedQuery).skip(skipCount).limit(pageSize);
+        } catch (error) {
+            throw error;
+        }
+    }
 
     public async updateUser(user_params: IUser): Promise<void> {
         try {
@@ -47,8 +55,6 @@ export default class UserService {
             throw error;
         }
     }
-    
-    
 
     public async addPlaceToUser(userId: Types.ObjectId, placeId: Types.ObjectId): Promise<void> {
         try {

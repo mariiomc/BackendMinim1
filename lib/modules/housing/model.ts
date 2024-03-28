@@ -25,8 +25,8 @@ export interface IHousing {
         sunday: string;
     };
     verified: boolean;
-    date: Date;
     house_deactivated:boolean;
+    creation_date: Date;
     modified_date: Date;
 
 

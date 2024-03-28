@@ -20,7 +20,7 @@ export class ConversationController {
                   content: req.body.content,
               };
               const conversation_data = await this.conversation_service.createConversation(conversation_params);
-              return res.status(201).json({ message: 'Conversation created successfully', conversation: conversation_data });
+              return res.status(201).json(conversation_data);
           }else{            
               return res.status(400).json({ error: 'Missing fields' });
           }
@@ -39,7 +39,7 @@ export class ConversationController {
                 return res.status(400).json({ error: 'User not found' });
             }
             // Send success response
-            return res.status(200).json({ data: user_data, message: 'Successful'});
+            return res.status(200).json(user_data);
         } else {
             return res.status(400).json({ error: 'Missing fields' });
         }
@@ -55,7 +55,7 @@ public async deleteConversation(req: Request, res: Response) {
             const delete_details = await this.conversation_service.deleteConversation(req.params.id);
              if (delete_details.deletedCount !== 0) {
                      // Send success response if user deleted
-                     return res.status(200).json({ message: 'Successful'});
+                     return res.status(200).json({ message: 'Conversation Deleted'});
                  } else {
                      // Send failure response if user not found
                      return res.status(400).json({ error: 'Conversation not found' });

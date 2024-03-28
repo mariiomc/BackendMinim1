@@ -30,8 +30,8 @@ const schema = new Schema({
         required: true
       },
     verified: { type: Boolean, required: true },
-    date: { type: Date, required: true },
     house_deactivated: {type:Boolean,required:true,default:false},
+    creation_date: {type:Date,required:true,default:new Date()},
     modified_date: {type:Date,required:true,default: new Date()}
 
 });

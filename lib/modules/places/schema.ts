@@ -36,6 +36,7 @@ const schema = new Schema({
   },
   date: { type: Date, default:Date.now, required: true },
   place_deactivated: {type:Boolean,required:true,default:false},
+  creation_date: {type:Date,required:true,default:new Date()},
   modified_date: {type:Date,required:true,default: new Date()}
 
 });

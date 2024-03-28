@@ -57,7 +57,7 @@ export class PlaceController {
             const place_data = await this.place_service.createPlace(place_params);
             // Now, you may want to add the created post's ID to the user's array of posts
             await this.user_service.addPlaceToUser(req.body.author, place_data._id);
-            return res.status(201).json({ message: 'Post created successfully', place: place_data });
+            return res.status(201).json(place_data);
           } else {
             return res.status(400).json({ error: 'Missing fields' });
           }
@@ -73,7 +73,7 @@ export class PlaceController {
                 // Fetch user
                 const place_data = await this.place_service.filterPlace(place_filter);
                 // Send success response
-                return res.status(200).json({ data: place_data, message: 'Successful'});
+                return res.status(200).json(place_data);
             } else {
                 return res.status(400).json({ error: 'Missing fields' });
             }
@@ -103,7 +103,7 @@ export class PlaceController {
         const new_place_data = await this.place_service.filterPlace(place_filter);
         // Send success response
         if (new_place_data.place_deactivated === true) {
-            return res.status(200).json({ message: 'Successful' });
+            return res.status(200).json({ message: 'Place deactivated' });
         }
     } else {
         // Send error response if ID parameter is missing

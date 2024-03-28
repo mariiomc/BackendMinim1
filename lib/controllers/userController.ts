@@ -32,7 +32,7 @@ export class UserController {
                     modified_date: new Date(),
                 };
                 const user_data = await this.user_service.register(user_params);
-                return res.status(201).json({ message: 'User created successfully', user: user_data });
+                return res.status(201).json(user_data );
             }else{            
                 return res.status(400).json({ error: 'Missing fields' });
             }
@@ -51,7 +51,7 @@ export class UserController {
                     return res.status(400).json({ error: 'User not found' });
                 }
                 // Send success response
-                return res.status(200).json({ data: user_data, message: 'Successful'});
+                return res.status(200).json(user_data);
             } else {
                 return res.status(400).json({ error: 'Missing fields' });
             }
@@ -67,10 +67,10 @@ export class UserController {
             const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 10;
     
             // Fetch users based on pagination parameters
-            const user_data = await this.user_service.filterUsers({}, page, pageSize);
+            const user_data = await this.user_service.filterUsersEvenDeactivated({}, page, pageSize);
     
             // Send success response
-            return res.status(200).json({ data: user_data, message: 'Successful' });//quitar mensaje successful
+            return res.status(200).json(user_data);
         } catch (error) {
             return res.status(500).json({ error: 'Internal server error' });
         }
@@ -87,6 +87,10 @@ export class UserController {
                     return res.status(400).json({ error: 'User not found' });
                 }
                 const objectid = new mongoose.Types.ObjectId(req.params.id);
+    
+                // Check if emergency_contact exists in req.body and handle accordingly
+                const emergency_contact = req.body.emergency_contact || {};
+                
                 const user_params: IUser = {
                     _id: objectid, 
                     first_name: req.body.first_name || user_data.first_name,
@@ -108,8 +112,8 @@ export class UserController {
                     role: req.body.role || user_data.role,
                     address: req.body.address || user_data.address,
                     emergency_contact: {
-                        full_name: req.body.emergency_contact.full_name || user_data.emergency_contact.full_name, 
-                        telephone: req.body.emergency_contact.telephone || user_data.emergency_contact.telephone,
+                        full_name: emergency_contact.full_name || user_data.emergency_contact?.full_name,
+                        telephone: emergency_contact.telephone || user_data.emergency_contact?.telephone,
                     },
                     user_deactivated: user_data.user_deactivated,
                     creation_date: user_data.creation_date,
@@ -120,7 +124,7 @@ export class UserController {
                 //get new user data
                 const new_user_data = await this.user_service.filterOneUser(user_filter);
                 // Send success response
-                return res.status(200).json({ data: new_user_data, message: 'Successful'});
+                return res.status(200).json(new_user_data);
             } else {
                 // Send error response if ID parameter is missing
                 return res.status(400).json({ error: 'Missing ID parameter' });
@@ -153,7 +157,7 @@ export class UserController {
             const new_user_data = await this.user_service.filterOneUser(user_filter);
             // Send success response
             if (new_user_data.user_deactivated === true) {
-                return res.status(200).json({ message: 'Successful' });
+                return res.status(200).json({ message: 'User Deleted' });
             }
         } else {
             // Send error response if ID parameter is missing

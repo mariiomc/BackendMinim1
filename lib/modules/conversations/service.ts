@@ -1,5 +1,6 @@
 import { IConversation } from './model';
 import conversations from './schema';
+import { FilterQuery } from 'mongoose';
 
 export default class ConversationService {
     
@@ -22,12 +23,12 @@ export default class ConversationService {
         }
     }
 
-    public async deleteConversation(_id: string): Promise<{ deletedCount: number }> {
+    public async deactivateConversation(conversation_paramsPartial: Partial<IConversation>, conversation_filter: FilterQuery<IConversation>): Promise<void> {
         try {
-            const query = { _id: _id };
-            return await conversations.deleteOne(query);
+            await conversations.findOneAndUpdate(conversation_filter, conversation_paramsPartial);
         } catch (error) {
             throw error;
         }
     }
+
 }
