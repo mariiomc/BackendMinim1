@@ -9,7 +9,7 @@ import housings from '../modules/housing/schema';
 export class authJWT{
     
 
-    public async  verifyToken (req: Request, res: Response, next: NextFunction) {
+    public async verifyToken (req: Request, res: Response, next: NextFunction) {
         
         try{
 
@@ -105,6 +105,19 @@ export class authJWT{
         console.log(error)
         return res.status(500).send({ message: error });
     }
+    };
+
+    public async isAdmin (req: Request, res: Response, next: NextFunction) {
+        try {
+            const user = await users.findById(req.userId);
+            if(user.role == "admin"){
+                return next();
+            }
+            return res.status(403).json({ message: "Require Admin Role!" });
+        } catch (error) {
+            console.log(error)
+            return res.status(500).send({ message: error });
+        }
     };
 
 

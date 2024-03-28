@@ -12,7 +12,6 @@ export interface IPlace {
         longitude: number;
     };
     photo: string;
-    location: string;
     typeOfPlace: {
         bankito: boolean;
         public: boolean; //false = private true = public

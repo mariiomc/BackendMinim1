@@ -13,9 +13,24 @@ export default class ReviewService {
         }
     }
 
-    public async filterReviewsByAuthor(userId: any): Promise<IReview[]> {
+    public async filterReviewsByAuthor(query: any): Promise<IReview[]> {
         try {
-            const query = { author: userId };
+            return await reviews.find(query);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async filterReviewsByPlace(query: any): Promise<IReview[]> {
+        try {
+            return await reviews.find(query);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async filterReviewsByHousing(query: any): Promise<IReview[]> {
+        try {
             return await reviews.find(query);
         } catch (error) {
             throw error;

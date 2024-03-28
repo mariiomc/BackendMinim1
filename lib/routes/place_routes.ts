@@ -13,12 +13,29 @@ export class PlaceRoutes {
         
         app.post('/place', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, next);
-            this.place_controller.createPlace(req, res);
+            this.place_controller.create_place(req, res);
         });
 
         app.get('/place/:id', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, next);
-            this.place_controller.getPlace(req, res);
+            this.place_controller.get_place(req, res);
+        });
+
+        app.get('/place', (req: Request, res: Response, next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, next);
+            this.place_controller.get_places(req, res);
+        });
+
+        app.get('/place/admin', (req: Request, res: Response, next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, next);
+            this.AuthJWT.isAdmin(req, res, next);
+            this.place_controller.get_places_even_deactivated(req, res);
+        });
+
+        app.put('/palce/:id', (req: Request, res: Response,next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, next);
+            this.AuthJWT.isOwner(req, res, next,'User');
+            this.place_controller.update_place(req, res);
         });
 
         app.delete('/place/:id', (req: Request, res: Response, next: NextFunction) => {

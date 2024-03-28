@@ -30,6 +30,7 @@ export default class PostService {
             throw error;
         }
     }
+    
     public async filterPlacesEvenDeactivated(query: any, page: number, pageSize: number): Promise<IPlace[] | null> {
         try {
             const skipCount = (page - 1) * pageSize;
@@ -40,7 +41,7 @@ export default class PostService {
         }
     }
 
-    public async upadtePlace(place_params: IPlace): Promise<void> {
+    public async updatePlace(place_params: IPlace): Promise<void> {
         try {
             const query = { _id: place_params._id };
             await places.findOneAndUpdate(query, place_params);
