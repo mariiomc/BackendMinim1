@@ -4,6 +4,7 @@ import users  from '../modules/users/schema';
 import places from '../modules/places/schema';
 import reviews from '../modules/reviews/schema';
 import housings from '../modules/housing/schema';
+import conversations from '../modules/conversations/schema';
 
 
 export class authJWT{
@@ -95,6 +96,17 @@ export class authJWT{
                         if (user._id != req.userId) return res.status(403).json({ message: "Not Owner" });
                     }
                         return next();           
+                }
+                case 'Conversation':{
+                    if(!isAdmin){
+                        const conversationId = req.params.id;
+                        const conversation = await conversations.findById(conversationId);
+                
+                        if (!conversation) return res.status(403).json({ message: "No conversation found" });
+                
+                        if (conversation.user != req.userId) return res.status(403).json({ message: "Not Owner" });
+                    }
+                        return next();
                 }
                 default:{
                     return res.status(500).send({error: 'Internal server error' });

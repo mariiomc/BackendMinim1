@@ -32,9 +32,9 @@ export class PlaceRoutes {
             this.place_controller.get_places_even_deactivated(req, res);
         });
 
-        app.put('/palce/:id', (req: Request, res: Response,next: NextFunction) => {
+        app.put('/place/:id', (req: Request, res: Response,next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, next);
-            this.AuthJWT.isOwner(req, res, next,'User');
+            this.AuthJWT.isOwner(req, res, next,'Place');
             this.place_controller.update_place(req, res);
         });
 

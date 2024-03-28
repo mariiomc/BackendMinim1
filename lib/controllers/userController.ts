@@ -108,7 +108,6 @@ export class UserController {
         }
     }
     
-
     public async update_user(req: Request, res: Response) {
         try {
             if (req.params.id) {
@@ -201,4 +200,5 @@ export class UserController {
         return res.status(500).json({ error: 'Internal server error' });
     }
 }
+
 }

@@ -15,7 +15,7 @@ const schema = new Schema({
         required: true,
       },
     photo: { type: String, required: true },
-    location: { type: String, required: true },
+    address: { type: String, required: true },
     availability: { type: Boolean, required: true },
     coffee: { type: Boolean, required: true },
     schedule: {

@@ -44,7 +44,7 @@ export class ReviewRoutes {
 
         app.put('/review/:id', (req: Request, res: Response,next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, next);
-            this.AuthJWT.isOwner(req, res, next,'User');
+            this.AuthJWT.isOwner(req, res, next,'Review');
             this.review_controller.update_review(req, res);
         });
 

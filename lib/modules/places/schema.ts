@@ -35,6 +35,7 @@ const schema = new Schema({
     required: true
   },
   date: { type: Date, default:Date.now, required: true },
+  address: { type: String, required: true },
   place_deactivated: {type:Boolean,required:true,default:false},
   creation_date: {type:Date,required:true,default:new Date()},
   modified_date: {type:Date,required:true,default: new Date()}

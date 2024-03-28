@@ -26,6 +26,7 @@ export interface IPlace {
         saturday: string;
         sunday: string;
     };
+    address: string;
     place_deactivated:boolean;
     creation_date: Date;
     modified_date: Date;

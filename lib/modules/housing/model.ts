@@ -12,7 +12,7 @@ export interface IHousing {
         longitude: number;
     };
     photo: string;
-    location: string;
+    address: string;
     availability: boolean;
     coffee: boolean; //true only "coffee" 
     schedule: {
@@ -28,6 +28,5 @@ export interface IHousing {
     house_deactivated:boolean;
     creation_date: Date;
     modified_date: Date;
-
-
+    
 }

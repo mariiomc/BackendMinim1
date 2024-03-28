@@ -80,7 +80,7 @@ export default class HousingService {
         }
     }
 
-    public async deactivateUser(housing_paramsPartial: Partial<IHousing>, housing_filter: FilterQuery<IHousing>): Promise<void> {
+    public async deactivateHouse(housing_paramsPartial: Partial<IHousing>, housing_filter: FilterQuery<IHousing>): Promise<void> {
         try {
             await housing.findOneAndUpdate(housing_filter, housing_paramsPartial);
         } catch (error) {

@@ -22,6 +22,7 @@ export class PlaceController {
           req.body.type &&
           req.body.typeOfPlace &&
           req.body.schedule &&
+          req.body.address &&
           req.body.creation_date &&
           req.body.modified_date
         ) {
@@ -49,6 +50,7 @@ export class PlaceController {
               saturday: req.body.schedule.saturday,
               sunday: req.body.schedule.sunday,
             },
+            address: req.body.address,
             place_deactivated: false,
             creation_date: req.body.creation_date,
             modified_date: req.body.modified_date
@@ -150,6 +152,7 @@ export class PlaceController {
                       saturday: req.body.schedule.saturday || place_data.schedule.saturday,
                       sunday: req.body.schedule.sunday || place_data.schedule.sunday,
                   },
+                  address: req.body.address || place_data.address,
                   place_deactivated: place_data.place_deactivated,
                   creation_date: place_data.creation_date,
                   modified_date: new Date(),
