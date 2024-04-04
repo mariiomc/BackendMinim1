@@ -1,16 +1,22 @@
 import { Application, Request, Response, NextFunction } from 'express';
 import { UserController } from '../controllers/userController';
 import  {authJWT}  from '../middlewares/authJWT';
+import { AuthController } from '../controllers/authController';
 
 export class UserRoutes {
 
     private user_controller: UserController = new UserController();
     private AuthJWT: authJWT = new authJWT();
+    private auth_controller: AuthController = new AuthController();
 
     public route(app: Application) {
         
         app.post('/users', (req: Request, res: Response) => {
             this.user_controller.register_user(req, res);
+        });
+
+        app.get('/login', (req: Request, res: Response) => {
+            this.auth_controller.signin(req, res);
         });
 
         app.get('/users/:id', (req: Request, res: Response, next: NextFunction) => {
