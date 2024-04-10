@@ -1,35 +1,36 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt from "jsonwebtoken";
+import * as jwt from 'jsonwebtoken';
 import users  from '../modules/users/schema';
 import places from '../modules/places/schema';
 import reviews from '../modules/reviews/schema';
 import housings from '../modules/housing/schema';
 import conversations from '../modules/conversations/schema';
-
+import IJwtPayload from '../modules/JWTPayload';
 
 export class authJWT{
     
 
     public async verifyToken (req: Request, res: Response, next: NextFunction) {
-        
         try{
-
-        const _SECRET: string = 'PalabraSecreta';
+        const _SECRET: string = 'api+jwt';
         console.log("verifyToken");
         
         //const token = await req.headers.authorization.split(' ')[1]; // Obtener el token de la cabecera
         const token = req.header("x-access-token");
         if (!token) return res.status(403).json({ message: "No token provided" });
         try {
-            const decoded = jwt.verify(token, _SECRET);
-            console.log("Token decodificado correctamente: " + decoded.foo);   
-            req.userId = decoded.foo;
+            const decoded = jwt.verify(token, _SECRET) as IJwtPayload;
+            console.log("Verified correctly");   
+            req.userId = decoded.id;
+            console.log(req.userId);
             const user = await users.findById(req.userId, { password: 0 });
             console.log(user);
             if (!user) return res.status(404).json({ message: "No user found" });
+            console.log("User found");
             return next();
 
             } catch (error) {
+                console.log("Error when decoding token: " + error);
                 return res.status(401).json({ message: "Unauthorized! Invalid Token" });
             }
         }
@@ -121,8 +122,10 @@ export class authJWT{
 
     public async isAdmin (req: Request, res: Response, next: NextFunction) {
         try {
+            console.log("isAdmin verification");
             const user = await users.findById(req.userId);
             if(user.role == "admin"){
+                console.log("User is admin");
                 return next();
             }
             return res.status(403).json({ message: "Require Admin Role!" });

@@ -15,7 +15,7 @@ export class UserRoutes {
             this.user_controller.register_user(req, res);
         });
 
-        app.get('/login', (req: Request, res: Response) => {
+        app.post('/login', (req: Request, res: Response) => {
             this.auth_controller.signin(req, res);
         });
 
