@@ -28,7 +28,7 @@ export class UserRoutes {
             });
         });
 
-        app.get('/users/admin/:id', (req: Request, res: Response, next: NextFunction) => {
+        app.get('/usersadmin/:id', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
                     return next(err); // Short-circuit if token verification fails
@@ -54,7 +54,7 @@ export class UserRoutes {
             });
         });
 
-        app.get('/users/admin', (req: Request, res: Response, next: NextFunction) => {
+        app.get('/usersadmin', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
                     return next(err); // Short-circuit if token verification fails
@@ -63,7 +63,7 @@ export class UserRoutes {
                     if (err) {
                         return next(err); // Short-circuit if isAdmin check fails
                     }
-                    this.user_controller.get_users_even_deactivated(req, res);
+                    this.user_controller.get_users(req, res);
                 });
             });
         });
