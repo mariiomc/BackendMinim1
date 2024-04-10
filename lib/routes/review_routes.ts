@@ -12,46 +12,92 @@ export class ReviewRoutes {
     public route(app: Application) {
         
         app.post('/review', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.review_controller.create_review(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.review_controller.create_review(req, res);
+            });
         });
 
         app.get('/review/:id', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.review_controller.get_review_by_id(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.review_controller.get_review_by_id(req, res);
+            });
         });
 
         app.get('/review/admin/:id', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.AuthJWT.isAdmin(req, res, next);
-            this.review_controller.get_review_by_id_even_deactivated(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.AuthJWT.isAdmin(req, res, (err?: any) => {
+                    if (err) {
+                        return next(err); // Short-circuit if isAdmin check fails
+                    }
+                    this.review_controller.get_review_by_id_even_deactivated(req, res);
+                });
+            });
         });
 
         app.get('/review/byAuthor', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.review_controller.get_reviews_by_author(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.review_controller.get_reviews_by_author(req, res);
+            });
         });
 
         app.get('/review/byPlace', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.review_controller.get_reviews_by_place(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.review_controller.get_reviews_by_place(req, res);
+            });
         });
 
         app.get('/review/byHousing', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.review_controller.get_reviews_by_housing(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.review_controller.get_reviews_by_housing(req, res);
+            });
         });
 
-        app.put('/review/:id', (req: Request, res: Response,next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.AuthJWT.isOwner(req, res, next,'Review');
-            this.review_controller.update_review(req, res);
+        // Update review by ID
+        app.put('/review/:id', (req: Request, res: Response, next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.AuthJWT.isOwner(req, res, (err?: any) => {
+                    if (err) {
+                        return next(err); // Short-circuit if isOwner check fails
+                    }
+                    this.review_controller.update_review(req, res);
+                }, 'Review');
+            });
         });
 
+        // Delete review by ID
         app.delete('/review/:id', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.AuthJWT.isOwner(req, res, next,'Review');
-            this.review_controller.delete_review(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.AuthJWT.isOwner(req, res, (err?: any) => {
+                    if (err) {
+                        return next(err); // Short-circuit if isOwner check fails
+                    }
+                    this.review_controller.delete_review(req, res);
+                }, 'Review');
+            });
         });
 
     }

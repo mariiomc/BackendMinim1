@@ -11,38 +11,77 @@ export class HousingRoutes {
 
     public route(app: Application) {
         
-        
         app.post('/housing', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.housing_controller.create_house(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.housing_controller.create_house(req, res);
+            });
         });
 
         app.get('/housing/:id', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.housing_controller.get_house(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.housing_controller.get_house(req, res);
+            });
         });
 
         app.get('/housing', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.housing_controller.get_housing(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.housing_controller.get_housing(req, res);
+            });
         });
 
         app.get('/housing/admin', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.AuthJWT.isAdmin(req, res, next);
-            this.housing_controller.get_housing_even_deactivated(req, res);
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.AuthJWT.isAdmin(req, res, (err?: any) => {
+                    if (err) {
+                        return next(err); // Short-circuit if isAdmin check fails
+                    }
+                    this.housing_controller.get_housing_even_deactivated(req, res);
+                });
+            });
         });
 
-        app.put('/housing/:id', (req: Request, res: Response,next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.AuthJWT.isOwner(req, res, next,'Housing');
-            this.housing_controller.update_house(req, res);
+        // Update housing by ID
+        app.put('/housing/:id', (req: Request, res: Response, next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.AuthJWT.isOwner(req, res, (err?: any) => {
+                    if (err) {
+                        return next(err); // Short-circuit if isOwner check fails
+                    }
+                    this.housing_controller.update_house(req, res);
+                }, 'Housing');
+            });
         });
 
-         app.delete('/housing/:id', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, next);
-            this.AuthJWT.isOwner(req, res, next,'Housing');
-             this.housing_controller.deactivate_house(req, res);
-         });
+        // Delete housing by ID
+        app.delete('/housing/:id', (req: Request, res: Response, next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.AuthJWT.isOwner(req, res, (err?: any) => {
+                    if (err) {
+                        return next(err); // Short-circuit if isOwner check fails
+                    }
+                    this.housing_controller.deactivate_house(req, res);
+                }, 'Housing');
+            });
+        });
+
+
     }
 }
