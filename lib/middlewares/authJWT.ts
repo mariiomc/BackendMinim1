@@ -24,7 +24,6 @@ export class authJWT{
             req.userId = decoded.id;
             console.log(req.userId);
             const user = await users.findById(req.userId, { password: 0 });
-            console.log(user);
             if (!user) return res.status(404).json({ message: "No user found" });
             console.log("User found");
             return next();
