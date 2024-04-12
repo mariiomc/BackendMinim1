@@ -18,18 +18,16 @@ export interface IPlace {
         covered: boolean;
     };
     schedule: {
-        monday: string;
-        tuesday: string;
-        wednesday: string;
-        thursday: string;
-        friday: string;
-        saturday: string;
-        sunday: string;
+        monday: String;
+        tuesday: String;
+        wednesday: String;
+        thursday: String;
+        friday: String;
+        saturday: String;
+        sunday: String;
     };
     address: string;
     place_deactivated:boolean;
     creation_date: Date;
     modified_date: Date;
-
-
 }

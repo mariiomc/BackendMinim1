@@ -14,9 +14,11 @@ export class PlaceRoutes {
         app.post('/place', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
+                    console.log("Error: " + err)
                     return next(err); // Short-circuit if token verification fails
                 }
                 this.place_controller.create_place(req, res);
+                
             });
         });
 

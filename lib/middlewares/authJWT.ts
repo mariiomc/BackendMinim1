@@ -17,7 +17,12 @@ export class authJWT{
         
         //const token = await req.headers.authorization.split(' ')[1]; // Obtener el token de la cabecera
         const token = req.header("x-access-token");
-        if (!token) return res.status(403).json({ message: "No token provided" });
+
+        if (!token){
+            console.log("no token provided")
+            return res.status(403).json({ message: "No token provided" });
+        } 
+        console.log("token provided")
         try {
             const decoded = jwt.verify(token, _SECRET) as IJwtPayload;
             console.log("Verified correctly");   

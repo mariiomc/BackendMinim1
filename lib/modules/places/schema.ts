@@ -15,7 +15,6 @@ const schema = new Schema({
     required: true,
   },
   photo: { type: String, required: true },
-  location: { type: String, required: true },
   typeOfPlace: {
     type: {
     bankito: { type: Boolean, required: true },
@@ -34,7 +33,6 @@ const schema = new Schema({
     sunday: { type: String, required: true }},
     required: true
   },
-  date: { type: Date, default:Date.now, required: true },
   address: { type: String, required: true },
   place_deactivated: {type:Boolean,required:true,default:false},
   creation_date: {type:Date,required:true,default:new Date()},

@@ -11,6 +11,15 @@ export class PlaceController {
 
   public async create_place(req: Request, res: Response) {
       try {
+        console.log("create place")
+        console.log(req.body.title, req.body.content,req.body.author,req.body.rating,
+            req.body.coords,
+            req.body.photo,
+            req.body.typeOfPlace,
+            req.body.schedule,
+            req.body.address,
+            req.body.creation_date,
+            req.body.modified_date)
         // this check whether all the fields were sent through the request or not
         if (
           req.body.title &&
@@ -19,13 +28,13 @@ export class PlaceController {
           req.body.rating &&
           req.body.coords &&
           req.body.photo &&
-          req.body.type &&
           req.body.typeOfPlace &&
           req.body.schedule &&
           req.body.address &&
           req.body.creation_date &&
           req.body.modified_date
         ) {
+        console.log("IPlace")
           const place_params: IPlace = {
             title: req.body.title,
             content: req.body.content,
@@ -37,9 +46,9 @@ export class PlaceController {
             },
             photo: req.body.photo,
             typeOfPlace: {
-              bankito: req.body.type.bankito,
-              public: req.body.type.public,
-              covered: req.body.type.covered,
+              bankito: req.body.typeOfPlace.bankito,
+              public: req.body.typeOfPlace.public,
+              covered: req.body.typeOfPlace.covered,
             },
             schedule: {
               monday: req.body.schedule.monday,
@@ -55,14 +64,19 @@ export class PlaceController {
             creation_date: req.body.creation_date,
             modified_date: req.body.modified_date
           };
+          console.log("Place data")
           const place_data = await this.place_service.createPlace(place_params);
           // Now, you may want to add the created post's ID to the user's array of posts
+          console.log("place data realizado")
           await this.user_service.addPlaceToUser(req.body.author, place_data._id);
+          console.log("añadido place a user")
           return res.status(201).json(place_data);
         } else {
+            console.log("missing fields")
           return res.status(400).json({ error: 'Missing fields' });
         }
       } catch (error) {
+        console.log("Error: "+error)
         return res.status(500).json({ error: 'Internal server error' });
       }
   }
