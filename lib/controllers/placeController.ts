@@ -132,14 +132,18 @@ export class PlaceController {
   public async update_place(req: Request, res: Response) {
       try {
           if (req.params.id) {
+            console.log("Estoy aqui 1")
               const place_filter = { _id: req.params.id };
               // Fetch user
               const place_data = await this.place_service.filterOnePlace(place_filter);
               if(place_data.place_deactivated===true){
                   return res.status(400).json({ error: 'Place not found' });
               }
+              console.log("Estoy aqui 2")
+
               const objectid = new mongoose.Types.ObjectId(req.params.id);
-  
+              console.log("Estoy aqui 3")
+
               // Check if emergency_contact exists in req.body and handle accordingly
               const place_params: IPlace = {
                   _id: objectid,
@@ -153,9 +157,9 @@ export class PlaceController {
                   },
                   photo: req.body.photo || place_data.photo,
                   typeOfPlace: {
-                      bankito: req.body.type.bankito || place_data.typeOfPlace.bankito,
-                      public: req.body.type.public || place_data.typeOfPlace.public,
-                      covered: req.body.type.covered || place_data.typeOfPlace.covered,
+                      bankito: req.body.typeOfPlace.bankito || place_data.typeOfPlace.bankito,
+                      public: req.body.typeOfPlace.public || place_data.typeOfPlace.public,
+                      covered: req.body.typeOfPlace.covered || place_data.typeOfPlace.covered,
                   },
                   schedule: {
                       monday: req.body.schedule.monday || place_data.schedule.monday,
@@ -172,9 +176,15 @@ export class PlaceController {
                   modified_date: new Date(),
               };
               // Update user
+              console.log("Estoy aqui 4")
+
               await this.place_service.updatePlace(place_params);
               //get new user data
+              console.log("Estoy aqui 5")
+
               const new_place_data = await this.place_service.filterOnePlace(place_filter);
+              console.log("Estoy aqui 6")
+
               // Send success response
               return res.status(200).json(new_place_data);
           } else {
