@@ -113,6 +113,15 @@ export class authJWT{
                     }
                         return next();
                 }
+                case 'Event':{
+
+                    //Un evento solo puede eliminarlo un Admin
+
+                    if(!isAdmin){
+                        return res.status(403).json({ message: "Not Admin" });
+                    }
+                        return next();
+                }
                 default:{
                     return res.status(500).send({error: 'Internal server error' });
                 }

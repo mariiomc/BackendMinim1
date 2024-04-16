@@ -17,6 +17,7 @@ export class UserRoutes {
 
         app.post('/login', (req: Request, res: Response) => {
             this.auth_controller.signin(req, res);
+
         });
 
         app.get('/users/:id', (req: Request, res: Response, next: NextFunction) => {
