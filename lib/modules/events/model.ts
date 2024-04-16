@@ -8,12 +8,11 @@ export interface IEvent {
 
     //Login --> Date ultimoLogin (ultimo login realizado por un usuario)
     //Creación user --> User user (último usuario creado)
-    //Edicion User --> Un String con los cambios que se han hecho a 
-    //ese usuario
+    //Edicion User --> Un string con el nombre ddel usuario editado
 
     
     _id?: mongoose.Types.ObjectId; // Optional _id field
-    ultimoLogin?: number;
+    ultimoLogin?: Date;
     User?: string;    
     edicionUser?: string;
     event_deactivated: boolean;
